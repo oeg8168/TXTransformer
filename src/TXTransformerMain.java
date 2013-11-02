@@ -41,6 +41,18 @@ public class TXTransformerMain {
 					&& !modification.equalsIgnoreCase("S"));
 
 			/*
+			 * Choose which modification function to be use.
+			 */
+			if(modification.equalsIgnoreCase("I"))
+				txtInsert(inputFile);
+			else if (modification.equalsIgnoreCase("D"))
+				txtDelete(inputFile);
+			else if (modification.equalsIgnoreCase("C"))
+				txtChange(inputFile);
+			else if (modification.equalsIgnoreCase("S"))
+				txtSwap(inputFile);
+			
+			/*
 			 * Ask user to continue or not. If input is not "y", all the other
 			 * input will recognized as "n".
 			 */
@@ -53,12 +65,43 @@ public class TXTransformerMain {
 		scanner.close();
 		return;
 		
-	} // end of main
+	} // end of main()
 	
-	// insert
-	// delete
-	// change
-	// swap
+	/*
+	 * Insert function. Return 0 if success
+	 */
+	public static int txtInsert(File inputFile)
+	{
+		System.out.println("Insert!");
+		return 0;
+	}	//end of txtInsert()
+	
+	/*
+	 * Delete function. Return 0 if success
+	 */
+	public static int txtDelete(File inputFile)
+	{
+		System.out.println("Delete!");
+		return 0;
+	}	//end of txtDelete()
+	
+	/*
+	 * Change function. Return 0 if success
+	 */
+	public static int txtChange(File inputFile)
+	{
+		System.out.println("Change!");
+		return 0;
+	}	//end of txtChange()
+	
+	/*
+	 * Swap function. Return 0 if success
+	 */
+	public static int txtSwap(File inputFile)
+	{
+		System.out.println("Swap!");
+		return 0;
+	}	//end of txtSwap()
 	
 	
 } // end of class TXTransformerMain
