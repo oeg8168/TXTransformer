@@ -94,7 +94,7 @@ public class TXTransformerMain {
 
 	} // end of main()
 
-	/*
+	/**
 	 * Insert function. Return 0 if success.
 	 */
 	public static int txtInsert(File inputFile, int percentage)
@@ -106,7 +106,7 @@ public class TXTransformerMain {
 		return 0;
 	} // end of txtInsert()
 
-	/*
+	/**
 	 * Delete function. Return 0 if success.
 	 */
 	public static int txtDelete(File inputFile, int percentage)
@@ -116,7 +116,7 @@ public class TXTransformerMain {
 		return 0;
 	} // end of txtDelete()
 
-	/*
+	/**
 	 * Change function. Return 0 if success.
 	 */
 	public static int txtChange(File inputFile, int percentage)
@@ -129,7 +129,7 @@ public class TXTransformerMain {
 		 */
 		for (int i = 0; i < inputFile.length(); i++) {
 			ras.seek(i);
-			if(Math.random()*100 < percentage)
+			if (Math.random() * 100 < percentage)
 				ras.write("#".getBytes());
 		}
 
@@ -137,7 +137,7 @@ public class TXTransformerMain {
 		return 0;
 	} // end of txtChange()
 
-	/*
+	/**
 	 * Swap function. Return 0 if success.
 	 */
 	public static int txtSwap(File inputFile, int percentage) {
