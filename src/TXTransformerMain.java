@@ -1,7 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.Random;
 import java.util.Scanner;
 
 public class TXTransformerMain {
@@ -15,6 +13,8 @@ public class TXTransformerMain {
 		 */
 		System.out.print("Input file: ");
 		File inputFile = new File(scanner.next());
+		String fileContent = AccessTXT.getText(inputFile);
+		String outputPath = new String();
 
 		if (inputFile.exists()) {
 			System.out.print("Size of " + inputFile.getPath() + " : ");
@@ -30,13 +30,13 @@ public class TXTransformerMain {
 		 */
 		boolean contiFlag = true;
 		String modification = "";
-		int percentage = 0;
+		int rate = 0;
 		do {
 			/*
 			 * Initialize variables to be use in this loop.
 			 */
 			modification = "";
-			percentage = 0;
+			rate = 0;
 
 			/*
 			 * Ask user which modification should be done.
@@ -54,30 +54,35 @@ public class TXTransformerMain {
 			 * Ask user the percentage of modification.
 			 */
 			do {
-				System.out
-						.println("Please input percentage of modification(1-100): ");
+				if (modification.equalsIgnoreCase("S")) {
+					System.out.println("Please input swap times(1-100): ");
+				} else {
+					System.out
+							.println("Please input percentage of modification(1-100): ");
+				}
+
 				try {
-					percentage = Integer.valueOf(scanner.next());
+					rate = Integer.valueOf(scanner.next());
 				} catch (NumberFormatException e) {
 					System.err
 							.println("This is not a correct format of numbers!");
 					continue;
 				}
-				if (percentage > 100 || percentage <= 0)
+				if (rate > 100 || rate <= 0)
 					System.err.println("Wrong range! Please input 1-100.");
-			} while (percentage > 100 || percentage <= 0);
+			} while (rate > 100 || rate <= 0);
 
 			/*
 			 * Choose which modification function to be use.
 			 */
 			if (modification.equalsIgnoreCase("I"))
-				txtInsert(inputFile, percentage);
+				fileContent = txtInsert(inputFile, rate);
 			else if (modification.equalsIgnoreCase("D"))
-				txtDelete(inputFile, percentage);
+				fileContent = txtDelete(inputFile, rate);
 			else if (modification.equalsIgnoreCase("C"))
-				txtChange(inputFile, percentage);
+				fileContent = txtChange(inputFile, rate);
 			else if (modification.equalsIgnoreCase("S"))
-				txtSwap(inputFile, percentage);
+				fileContent = txtSwap(inputFile, rate);
 
 			/*
 			 * Ask user to continue or not. If input is not "y", all the other
@@ -87,7 +92,13 @@ public class TXTransformerMain {
 			if (!scanner.next().equalsIgnoreCase("Y"))
 				contiFlag = false;
 
+			outputPath += (modification + rate);
+
 		} while (contiFlag);
+
+		outputPath += ("-" + inputFile.getPath());
+
+		AccessTXT.writeText(outputPath, fileContent);
 
 		scanner.close();
 		return;
@@ -95,54 +106,97 @@ public class TXTransformerMain {
 	} // end of main()
 
 	/**
-	 * Insert function. Return 0 if success.
+	 * Insert function.
+	 * 
+	 * @return modified String
 	 */
-	public static int txtInsert(File inputFile, int percentage)
+	public static String txtInsert(File inputFile, int percentage)
 			throws IOException {
-		System.out.println("Insert!");
+		StringBuffer strBuf = new StringBuffer(AccessTXT.getText(inputFile));
+		int insertOffset = 0;
 
-		// read file, modify, write file.
+		for (int i = 0; i < inputFile.length() * percentage * 0.01; i++) {
+			insertOffset = (int) ((inputFile.length() + i) * Math.random());
+			strBuf.insert(insertOffset, "#");
+		}
 
-		return 0;
+		return strBuf.toString();
 	} // end of txtInsert()
 
 	/**
-	 * Delete function. Return 0 if success.
+	 * Delete function.
+	 * 
+	 * @return modified String
 	 */
-	public static int txtDelete(File inputFile, int percentage)
+	public static String txtDelete(File inputFile, int percentage)
 			throws IOException {
-		System.out.println("Delete!");
+		StringBuffer strBuf = new StringBuffer(AccessTXT.getText(inputFile));
+		int insertOffset = 0;
 
-		return 0;
+		for (int i = 0; i < inputFile.length() * percentage * 0.01; i++) {
+			insertOffset = (int) ((inputFile.length() - i) * Math.random());
+			strBuf.deleteCharAt(insertOffset);
+		}
+
+		return strBuf.toString();
 	} // end of txtDelete()
 
 	/**
-	 * Change function. Return 0 if success.
+	 * Change function.
+	 * 
+	 * @return modified String
 	 */
-	public static int txtChange(File inputFile, int percentage)
+	public static String txtChange(File inputFile, int percentage)
 			throws IOException {
 
-		RandomAccessFile ras = new RandomAccessFile(inputFile, "rw");
+		char[] text = AccessTXT.getText(inputFile).toCharArray();
 
 		/*
 		 * Go through file and set character to '#' by percentage.
 		 */
 		for (int i = 0; i < inputFile.length(); i++) {
-			ras.seek(i);
 			if (Math.random() * 100 < percentage)
-				ras.write("#".getBytes());
+				text[i] = '#';
 		}
 
-		ras.close();
-		return 0;
+		return text.toString();
 	} // end of txtChange()
 
 	/**
-	 * Swap function. Return 0 if success.
+	 * Swap function.
+	 * 
+	 * @return modified String
 	 */
-	public static int txtSwap(File inputFile, int percentage) {
-		System.out.println("Swap!");
-		return 0;
+	public static String txtSwap(File inputFile, int times) {
+		StringBuffer strBuf = new StringBuffer(AccessTXT.getText(inputFile));
+
+		int front = 0;
+		int end = 0;
+		int temp = 0;
+		String tempString = null;
+		int insertOffset = 0;
+
+		for (int i = 0; i < times; i++) {
+			front = (int) (Math.random() * inputFile.length());
+			end = (int) (Math.random() * inputFile.length());
+
+			// swap if front > end
+			if (front > end) {
+				temp = front;
+				front = end;
+				end = temp;
+			}
+
+			tempString = strBuf.substring(front, end);
+
+			strBuf.delete(front, end);
+
+			insertOffset = (int) (Math.random() * strBuf.length());
+
+			strBuf.insert(insertOffset, tempString);
+		}
+
+		return strBuf.toString();
 	} // end of txtSwap()
 
 } // end of class TXTransformerMain

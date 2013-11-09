@@ -17,9 +17,9 @@ public class AccessTXT {
 	 * Read text from input file.
 	 * 
 	 * @param inputFile
-	 * @return char[] read from TXT file
+	 * @return String read from TXT file
 	 */
-	public static char[] getText(File inputFile) {
+	public static String getText(File inputFile) {
 		StringBuffer strBuf = new StringBuffer();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -32,21 +32,20 @@ public class AccessTXT {
 			e.printStackTrace();
 		}
 
-		return strBuf.toString().toCharArray();
+		return strBuf.toString();
 	} // end of getText()
 
 	/**
 	 * Write text to file
 	 * 
 	 * @param inputFile
-	 * @param txt
+	 * @param text
 	 *            text to be written to file
 	 * @return 1 if success, -1 if error occurs
 	 */
-	public int writeText(File inputFile, String text) {
+	public static int writeText(String path, String text) {
 		try {
-			BufferedWriter br = new BufferedWriter(new FileWriter(
-					inputFile.getPath()));
+			BufferedWriter br = new BufferedWriter(new FileWriter(path));
 			br.write(text);
 			br.close();
 		} catch (IOException e) {
