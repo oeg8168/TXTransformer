@@ -76,13 +76,13 @@ public class TXTransformerMain {
 			 * Choose which modification function to be use.
 			 */
 			if (modification.equalsIgnoreCase("I"))
-				fileContent = txtInsert(inputFile, rate);
+				fileContent = txtInsert(fileContent, rate);
 			else if (modification.equalsIgnoreCase("D"))
-				fileContent = txtDelete(inputFile, rate);
+				fileContent = txtDelete(fileContent, rate);
 			else if (modification.equalsIgnoreCase("C"))
-				fileContent = txtChange(inputFile, rate);
+				fileContent = txtChange(fileContent, rate);
 			else if (modification.equalsIgnoreCase("S"))
-				fileContent = txtSwap(inputFile, rate);
+				fileContent = txtSwap(fileContent, rate);
 
 			/*
 			 * Ask user to continue or not. If input is not "y", all the other
@@ -110,13 +110,13 @@ public class TXTransformerMain {
 	 * 
 	 * @return modified String
 	 */
-	public static String txtInsert(File inputFile, int percentage)
+	public static String txtInsert(String fileContent, int percentage)
 			throws IOException {
-		StringBuffer strBuf = new StringBuffer(AccessTXT.getText(inputFile));
+		StringBuffer strBuf = new StringBuffer(fileContent);
 		int insertOffset = 0;
 
-		for (int i = 0; i < inputFile.length() * percentage * 0.01; i++) {
-			insertOffset = (int) ((inputFile.length() + i) * Math.random());
+		for (int i = 0; i < fileContent.length() * percentage * 0.01; i++) {
+			insertOffset = (int) ((fileContent.length() + i) * Math.random());
 			strBuf.insert(insertOffset, "#");
 		}
 
@@ -128,13 +128,13 @@ public class TXTransformerMain {
 	 * 
 	 * @return modified String
 	 */
-	public static String txtDelete(File inputFile, int percentage)
+	public static String txtDelete(String fileContent, int percentage)
 			throws IOException {
-		StringBuffer strBuf = new StringBuffer(AccessTXT.getText(inputFile));
+		StringBuffer strBuf = new StringBuffer(fileContent);
 		int insertOffset = 0;
 
-		for (int i = 0; i < inputFile.length() * percentage * 0.01; i++) {
-			insertOffset = (int) ((inputFile.length() - i) * Math.random());
+		for (int i = 0; i < fileContent.length() * percentage * 0.01; i++) {
+			insertOffset = (int) ((fileContent.length() - i) * Math.random());
 			strBuf.deleteCharAt(insertOffset);
 		}
 
@@ -146,20 +146,20 @@ public class TXTransformerMain {
 	 * 
 	 * @return modified String
 	 */
-	public static String txtChange(File inputFile, int percentage)
+	public static String txtChange(String fileContent, int percentage)
 			throws IOException {
 
-		char[] text = AccessTXT.getText(inputFile).toCharArray();
+		char[] text = fileContent.toCharArray();
 
 		/*
 		 * Go through file and set character to '#' by percentage.
 		 */
-		for (int i = 0; i < inputFile.length(); i++) {
+		for (int i = 0; i < fileContent.length(); i++) {
 			if (Math.random() * 100 < percentage)
 				text[i] = '#';
 		}
 
-		return text.toString();
+		return new String(text);
 	} // end of txtChange()
 
 	/**
@@ -167,8 +167,8 @@ public class TXTransformerMain {
 	 * 
 	 * @return modified String
 	 */
-	public static String txtSwap(File inputFile, int times) {
-		StringBuffer strBuf = new StringBuffer(AccessTXT.getText(inputFile));
+	public static String txtSwap(String fileContent, int times) {
+		StringBuffer strBuf = new StringBuffer(fileContent);
 
 		int front = 0;
 		int end = 0;
@@ -177,8 +177,8 @@ public class TXTransformerMain {
 		int insertOffset = 0;
 
 		for (int i = 0; i < times; i++) {
-			front = (int) (Math.random() * inputFile.length());
-			end = (int) (Math.random() * inputFile.length());
+			front = (int) (Math.random() * fileContent.length());
+			end = (int) (Math.random() * fileContent.length());
 
 			// swap if front > end
 			if (front > end) {
